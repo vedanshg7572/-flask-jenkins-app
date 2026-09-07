@@ -11,7 +11,12 @@ pipeline {
             steps { bat 'npm install' }
         }
         stage('Run') {
-            steps { bat 'node app.js' }
+            steps {
+                nodejs('NodeJS_20') {
+                    bat 'node --check app.js'
+                    echo 'App verified successfully'
+                }
+            }
         }
     }
 }
