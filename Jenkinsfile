@@ -13,9 +13,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 bat '''
-                taskkill /F /IM node.exe /T 2>nul || echo No old process
-                start /B node app.js
-                echo App deployed successfully on port 3000
+                pm2 delete node-jenkins-app 2>nul || echo First time deploy
+                pm2 start app.js --name node-jenkins-app --update-env
+                pm2 save
+                echo Deployment Done
                 exit 0
                 '''
             }
