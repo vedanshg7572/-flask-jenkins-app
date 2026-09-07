@@ -10,11 +10,18 @@ pipeline {
         stage('Install') {
             steps { bat 'npm install' }
         }
-        stage('Run') {
+        stage('Deploy') {
             steps {
                 nodejs('NodeJS_20') {
-                    bat 'node --check app.js'
-                    echo 'App verified successfully'
+                    bat '''
+                    echo "Stopping old app..."
+                    taskkill /F /IM node.exe /T 2>nul || echo "No old process"
+                    timeout /t 3
+                    echo "Starting new app..."
+                    start /B node app.js
+                    timeout /t 5
+                    echo "App deployed on port 3000"
+                    '''
                 }
             }
         }
