@@ -1,20 +1,17 @@
 pipeline {
     agent any
+    tools {
+        nodejs 'NodeJS_20'
+    }
     stages {
+        stage('Clone') {
+            steps { echo 'Code Cloned' }
+        }
         stage('Install') {
-            steps {
-                bat 'pip install -r requirements.txt'
-            }
+            steps { bat 'npm install' }
         }
-        stage('Test Flask') {
-            steps {
-                bat 'python -c "import flask; print(flask.__version__)"'
-            }
-        }
-        stage('Run App') {
-            steps {
-                bat 'python app.py'
-            }
+        stage('Run') {
+            steps { bat 'node app.js' }
         }
     }
 }
